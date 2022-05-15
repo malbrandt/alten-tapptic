@@ -42,6 +42,8 @@ class UserReaction extends Model
         'to_user_id' => 'int',
     ];
     protected $fillable = [
+        'from_user_id',
+        'to_user_id',
         'type',
         'reaction',
     ];

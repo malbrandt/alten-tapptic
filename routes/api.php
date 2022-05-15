@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+// more proper route will be: POST /user/:to_user_id/reactions (but task assumes that all parameters will be sent in request body)
+Route::post('/reactions', \App\Http\Controllers\API\REST\AddReactionToUser::class);

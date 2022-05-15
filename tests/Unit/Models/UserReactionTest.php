@@ -8,14 +8,6 @@ use Tests\TestCase;
 
 class UserReactionTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /** @test */
-    public function user_reaction_has_factory(): void
-    {
-        self::assertInstanceOf(UserReaction::class, UserReaction::factory()->make());
-    }
-
     /** @test */
     public function can_set_only_correct_type(): void
     {
@@ -45,7 +37,7 @@ class UserReactionTest extends TestCase
     }
 
     /** @test */
-    public function cannot_set_reaction_without_settings_type()
+    public function cannot_set_reaction_without_settings_type(): void
     {
         $reaction = new UserReaction();
 
