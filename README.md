@@ -13,7 +13,6 @@ users) for tapptic backend assessment.
     - returns:
         - HTTP status code 201: if successfully created, returns created reaction. Format (
           JSON): `{ "from_user_id": int, "to_user_id": int, "type": string, "reaction": string }`
-        - HTTP status code 409: if reaction already exists (reactions cannot be changed); empty response
         - HTTP status code 422: if validation fails. Format (
           JSON): `{ "message": "The given data was invalid.", "errors": { "reaction": ["Reactions to users cannot be changed."] } }`
 
