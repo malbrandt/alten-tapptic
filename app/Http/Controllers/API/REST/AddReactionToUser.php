@@ -19,16 +19,12 @@ class AddReactionToUser extends Controller
 
     public function __invoke(AddReactionToUserRequest $request)
     {
-        $reaction = $this->userReactionService->add(
+         $reaction = $this->userReactionService->add(
             $request->get('from_user_id'),
             $request->get('to_user_id'),
-            $request->get('type', UserReaction::TYPE_SWIPE),
+            UserReaction::TYPE_SWIPE,
             $request->get('reaction', UserReaction::REACTION_SWIPE_LIKE),
         );
-
-        if (empty($reaction)) {
-            return response()->setStatusCode(Response::HTTP_CONFLICT);
-        }
 
         return (new \App\Http\Resources\UserReaction($reaction))
             ->response()

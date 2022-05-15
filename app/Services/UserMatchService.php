@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\PairMatched;
+use App\Exceptions\BusinessLogicValidationException;
 use App\Models\UserMatch;
 use App\Models\UserReaction;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,20 +39,9 @@ class UserMatchService
      */
     public function createMatch(int $firstUserId, int $secondUserId): UserMatch
     {
-        $matchExists = $this->userMatch->newModelQuery()
-            ->where(function (Builder $query) use ($firstUserId, $secondUserId) {
-                $query->where('first_user_id', $firstUserId);
-                $query->orWhere('second_user_id', $secondUserId);
-            })
-            ->orWhere(function (Builder $query) use ($firstUserId, $secondUserId) {
-                $query->where('first_user_id', $secondUserId);
-                $query->orWhere('second_user_id', $firstUserId);
-            })->exists();
-
-        if ($matchExists) {
-            throw new \DomainException(
-                \sprintf(
-                    'Match between %d and %d already exists!',
+        if ($this->matchExists($firstUserId, $secondUserId)) {
+            throw new BusinessLogicValidationException('reaction', \sprintf(
+                    'Match between users #%d and #%d already exists!',
                     $firstUserId,
                     $secondUserId
                 )
@@ -66,5 +56,18 @@ class UserMatchService
         PairMatched::dispatch($firstUserId, $secondUserId);
 
         return $match;
+    }
+
+    private function matchExists(int $firstUserId, int $secondUserId): bool
+    {
+        return $this->userMatch->newModelQuery()
+            ->where(function (Builder $query) use ($firstUserId, $secondUserId) {
+                $query->where('first_user_id', $firstUserId);
+                $query->orWhere('second_user_id', $secondUserId);
+            })
+            ->orWhere(function (Builder $query) use ($firstUserId, $secondUserId) {
+                $query->where('first_user_id', $secondUserId);
+                $query->orWhere('second_user_id', $firstUserId);
+            })->exists();
     }
 }

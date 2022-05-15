@@ -3,6 +3,7 @@
 namespace Tests\Services;
 
 use App\Events\PairMatched;
+use App\Exceptions\BusinessLogicValidationException;
 use App\Models\UserMatch;
 use App\Models\UserReaction;
 use App\Services\UserMatchService;
@@ -74,7 +75,7 @@ class UserMatchServiceTest extends TestCase
         $service = new UserMatchService($userReactionModel, $userMatchModel);
 
         self::withoutExceptionHandling();
-        self::expectException(\DomainException::class);
+        self::expectException(BusinessLogicValidationException::class);
         $service->createMatch(1, 2);
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Services;
 
 use App\Events\UserReactionAdded;
+use App\Exceptions\BusinessLogicValidationException;
 use App\Models\UserReaction;
 use App\Services\UserReactionService;
 use Illuminate\Support\Facades\Event;
@@ -22,8 +23,9 @@ class UserReactionServiceTest extends TestCase
 
         $service = new UserReactionService($userReactionMock);
 
-        self::assertNull($service->add(1, 2, UserReaction::TYPE_SWIPE, UserReaction::REACTION_SWIPE_LIKE));
-        Event::assertNothingDispatched();
+        self::withoutExceptionHandling();
+        self::expectException(BusinessLogicValidationException::class);
+        $service->add(1, 2, UserReaction::TYPE_SWIPE, UserReaction::REACTION_SWIPE_LIKE);
     }
 
     /** @test */

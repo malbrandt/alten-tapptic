@@ -22,18 +22,6 @@ class AddReactionToUserRequest extends FormRequest
                 'required',
                 'string',
                 'in:' . \implode(',', UserReaction::TYPE_REACTIONS[UserReaction::TYPE_SWIPE]),
-                // Prevent from adding reaction of same type between same two users
-                function ($attribute, $value, $fail) {
-                    $alreadyReacted = UserReaction::query()
-                        ->where('from_user_id', $this->request->get('from_user_id'))
-                        ->where('to_user_id', $this->request->get('to_user_id'))
-                        ->where('type', UserReaction::TYPE_SWIPE)
-                        ->exists();
-
-                    if ($alreadyReacted) {
-                        $fail('Reactions to users cannot be changed.');
-                    }
-                },
             ],
         ];
     }
